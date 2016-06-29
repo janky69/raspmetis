@@ -27,5 +27,15 @@ while True:
 	time.sleep(1)
 	
 	numbers = readNumber()
+	numbers = numbers[:4]
+	
+	wind_direction_c = numbers[0] + (numbers[1] << 8)
+	wind_speed = numbers[2]
+	bat = numbers[3]
+	wind_direction_p = int(wind_direction_c / 1023. * 360.)
+	wind_direction = wind_direction_p
+	if wind_direction > 180:
+		wind_direction -= 360
+
 #	print "Arduino: Hey RPI, I received a digit ", number
-	print numbers
+	print "%d -> %d -> %d" %(wind_direction_c, wind_direction_p, wind_direction)
