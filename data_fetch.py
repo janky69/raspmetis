@@ -18,15 +18,16 @@ def readNumber():
   return numbers
 
 
-while True:
+#while True:
 #	var = input("Enter 1 - 9: ")
 #	if not var:
 #		continue
 #	writeNumber(var)
 #	print "RPI: Hi Arduino, I sent you", var
 # sleep one second
-  time.sleep(1)
+#  time.sleep(1)
 	
+def getData():
   numbers = readNumber()
   numbers = numbers[:4]
 	
@@ -37,7 +38,8 @@ while True:
   wind_direction = wind_direction_p
   if wind_direction > 180:
     wind_direction -= 360
+  return wind_direction, wind_speed, bat
 
 #	print "Arduino: Hey RPI, I received a digit ", number
-  print "%d -> %d -> %d" %(wind_direction_c, wind_direction_p, wind_direction)
-  print "Wind speed: %d" %(wind_speed)
+#  print "%d -> %d -> %d" %(wind_direction_c, wind_direction_p, wind_direction)
+#  print "Wind speed: %d" %(wind_speed)
