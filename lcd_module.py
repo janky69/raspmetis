@@ -131,6 +131,7 @@ class LCDController():
 
   def initialize(self):
     lcd_init()
+    lcd_string("Hello!", LCD_LINE_1)
   
   def plot(self,line1, line2):
     lcd_string(line1, LCD_LINE_1)
