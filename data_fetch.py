@@ -28,8 +28,11 @@ def readNumber():
 #  time.sleep(1)
 	
 def getData():
-  numbers = readNumber()
-  numbers = numbers[:4]
+  try:
+    numbers = readNumber()
+    numbers = numbers[:4]
+  except:
+    return 0,0,0
 	
   wind_direction_c = numbers[0] + (numbers[1] << 8)
   wind_speed = numbers[2]

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from lcd_module import LCDController
 import smbus
 import time
@@ -21,7 +22,7 @@ if __name__ == "__main__":
       if status == 0:
         lcd.initialize()
         status = 1
-      lcd.plot("Wind speed: %d" % data[1],"Wind direction: %d" % data[0])
+      lcd.plot("Wind speed: %d" % data[1],"Wind dir: %d" % data[0])
     except:
       status = 0
     time.sleep(.5)
