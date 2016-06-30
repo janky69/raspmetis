@@ -9,20 +9,33 @@ bus = smbus.SMBus(1) # User SMBus(0) for version 1
 # The address we setup in the Arduino Program
 address = 0x25
 
+LCDOK = 1
+LCDFAIL = 0
 
 if __name__ == "__main__":
-  status = 0
+  lcd_status = LCDFAIL
   lcd = LCDController()
   
   while True:
-    # get data from arduino
-    data = getData()
-
     try:
-      if status == 0:
+      # get data from arduino
+      data = getData()
+
+      # set up the lcd
+      if lcd_status == LCDFAIL:
         lcd.initialize()
-        status = 1
+        lcd_status = LCDOK
       lcd.plot("Wind speed: %d" % data[1],"Wind dir: %d" % data[0])
+    except (KeyboardInterrupt, SystemExit):
+      if lcd_status == LCDOK:
+        lcd.plot("Quitting, bye!","")
+      raise
     except:
       status = 0
-    time.sleep(.5)
+    
+    try:
+      time.sleep(.5)
+    except (KeyboardInterrupt, SystemExit):
+      if lcd_status == LCDOK:
+        lcd.plot("Quitting, bye!","")
+      raise
