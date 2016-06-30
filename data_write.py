@@ -5,7 +5,8 @@ import thread
 def writedata(filename, buf, lock):
   lock.acquire()
   with open(filename, "a") as csvfile:
-    csvfile.write(buf+"\n")
+    for line in buf:
+      csvfile.write(line+"\n")
   lock.release()
   return
 
@@ -31,4 +32,4 @@ class DataWriter(object):
     if len(self.data) >= self.datathreshold and not self.lock.locked():
       buf = copy.deepcopy(self.data)
       self.data = []
-      thread.start_new_thread(writedata,self.filename,buf,self.lock)
+      thread.start_new_thread(writedata,(self.filename,buf,self.lock))

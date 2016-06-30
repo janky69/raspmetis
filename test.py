@@ -44,23 +44,27 @@ if __name__ == "__main__":
       ardu_status = data[3]
 
       # set up the lcd
-      if lcd_status == LCDFAIL:
-        lcd.initialize()
-        lcd_status = LCDOK
-      lcdplot(lcd, data, ardu_status, 0)
-      #lcd.plot("Wind spd: %03d" % data[1],"Wind dir: %03d" % data[0])
+      try:
+        if lcd_status == LCDFAIL:
+          lcd.initialize()
+          lcd_status = LCDOK
+        lcdplot(lcd, data, ardu_status, 0)
+        #lcd.plot("Wind spd: %03d" % data[1],"Wind dir: %03d" % data[0])
+
+      except IOError:
+        lcd_status = LCDFAIL
+      
+      # Pass the data (formatted) to the datawriter
       if ardu_status == RCP_OK:
         datawriter.append("%d,%d,%d"%(data[0],data[1],data[2]))
-    except (KeyboardInterrupt, SystemExit):
-      if lcd_status == LCDOK:
-        lcd.plot("Quitting, bye!","")
-      raise
-    except:
-      lcd_status = LCDFAIL
-
-    try:
+      
       time.sleep(.5)
+
     except (KeyboardInterrupt, SystemExit):
       if lcd_status == LCDOK:
         lcd.plot("Quitting, bye!","")
       raise
+
+    except:
+      raise
+
