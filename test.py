@@ -6,6 +6,7 @@ from data_fetch import getData, RCP_OK, RCP_FAIL
 from data_write import DataWriter
 import gpsdData
 from gpsdData import GpsPoller
+import math
 
 bus = smbus.SMBus(1) # User SMBus(0) for version 1
 
@@ -32,6 +33,19 @@ def lcdplot(lcd_controller, data, ardu_status, gps_status):
     "Wind spd: %03d A%s" % (data[1],ardu_plot_status),
     "Wind dir: %03d G%s" % (data[0],gps_plot_status)
   )
+
+def compute_wind_speed(wind_apparent_speed, wind_apparent_dir, fix_speed):
+  """
+    wind_apparent_speed in knots
+    wind_apparent_dir in degrees wrt my direction
+    fix_speed in m/s given by the gps
+  """
+  a = wind_apparent_speed
+  b = fix_speed * 1.94
+  th = wind_apparent_dir
+  # law of cosine
+  spd = math.sqrt(a * a + b * b - 2 * a * b * math.cos(math.pi * th / 180))
+  return spd
 
 if __name__ == "__main__":
   # Setup initial statuses
@@ -66,6 +80,12 @@ if __name__ == "__main__":
         gpsp.running = False
         gps_status = GPSFAIL
         raise
+
+      try:
+        adj_speed = compute_wind_speed(data[1],data[0],gpsd.speed)
+        data[1] = adj_speed
+      except:
+        pass
 
       # set up the lcd
       try:
