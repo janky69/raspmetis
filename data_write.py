@@ -10,6 +10,14 @@ def writedata(filename, buf, lock):
   lock.release()
   return
 
+def writedatal(filename, buf):
+  """Writes the data in a locking way."""
+  with open(filename, "a") as csvfile:
+    for line in buf:
+      csvfile.write(line+"\n")
+    csvfile.close()
+  return
+
 class DataWriter(object):
   """docstring for DataWriter"""
   def __init__(self, *args, **kwargs):
