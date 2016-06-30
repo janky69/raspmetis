@@ -3,7 +3,7 @@ from lcd_module import LCDController
 import smbus
 import time
 from data_fetch import getData, RCP_OK, RCP_FAIL
-from data_writer import DataWriter
+from data_write import DataWriter
 
 bus = smbus.SMBus(1) # User SMBus(0) for version 1
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
   lcd_status = LCDFAIL
   ardu_status = RCP_FAIL
   lcd = LCDController()
-  datawriter = DataWrite("/home/pi/testdata.csv")
+  datawriter = DataWriter("/home/pi/testdata.csv")
 
   while True:
     try:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         lcd.plot("Quitting, bye!","")
       raise
     except:
-      status = 0
+      lcd_status = LCDFAIL
 
     try:
       time.sleep(.5)

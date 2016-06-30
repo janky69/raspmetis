@@ -28,7 +28,7 @@ class DataWriter(object):
   def checkdata(self):
     """Check the size of data array. If it is bigger than a certain threshold
     save the data to file (possibly asynchronously) and empty the array."""
-    if len(self.data) >= self.datathreshold && not self.lock.locked():
+    if len(self.data) >= self.datathreshold and not self.lock.locked():
       buf = copy.deepcopy(self.data)
       self.data = []
       thread.start_new_thread(writedata,self.filename,buf,self.lock)
