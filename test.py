@@ -48,10 +48,10 @@ if __name__ == "__main__":
   # Check how these fail in case the gps module is not connected
   # see https://gist.github.com/wolfg1969/4653340 
   # and https://learn.adafruit.com/adafruit-ultimate-gps-on-the-raspberry-pi/using-your-gps
-  # for examples
 
   while True:
     try:
+
       # get data from arduino
       data = getData()
       ardu_status = data[3]
@@ -59,8 +59,8 @@ if __name__ == "__main__":
       # Start the gps watcher
       try:
         if not gpsp.running:
-          gpsp.start()
           gpsp.running = True
+          gpsp.start()
           gps_status = GPSOK
       except:
         gpsp.running = False
@@ -81,12 +81,15 @@ if __name__ == "__main__":
       # Pass the data (formatted) to the datawriter
       if ardu_status == RCP_OK:
         datawriter.append("%d,%d,%d"%(data[0],data[1],data[2]))
-      
+
+      # Wait before next rount
       time.sleep(.5)
 
     except (KeyboardInterrupt, SystemExit):
       if lcd_status == LCDOK:
         lcd.plot("Quitting, bye!","")
+      gpsp.running = False
+      gpsp.join()
       raise
 
     except:
