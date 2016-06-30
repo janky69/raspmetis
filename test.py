@@ -35,7 +35,7 @@ if __name__ == "__main__":
   lcd_status = LCDFAIL
   ardu_status = RCP_FAIL
   lcd = LCDController()
-  datawriter = DataWriter("/home/pi/testdata.csv")
+  datawriter = DataWriter(filename="/home/pi/testdata.csv")
 
   while True:
     try:
