@@ -26,13 +26,16 @@ def readNumber():
 #	print "RPI: Hi Arduino, I sent you", var
 # sleep one second
 #  time.sleep(1)
+
+RCP_OK = 1
+RCP_FAIL = 0
 	
 def getData():
   try:
     numbers = readNumber()
     numbers = numbers[:4]
   except:
-    return 0,0,0
+    return 0,0,0,RCP_FAIL
 	
   wind_direction_c = numbers[0] + (numbers[1] << 8)
   wind_speed = numbers[2]
@@ -41,7 +44,7 @@ def getData():
   wind_direction = wind_direction_p
   if wind_direction > 180:
     wind_direction -= 360
-  return wind_direction, wind_speed, bat
+  return wind_direction, wind_speed, bat, RCP_OK
 
 #	print "Arduino: Hey RPI, I received a digit ", number
 #  print "%d -> %d -> %d" %(wind_direction_c, wind_direction_p, wind_direction)
