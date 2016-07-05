@@ -2,6 +2,7 @@
 
 import smbus
 import time
+import threading
 
 bus = smbus.SMBus(1) # User SMBus(0) for version 1
 
@@ -35,3 +36,12 @@ def getData():
   if wind_direction > 180:
     wind_direction -= 360
   return wind_direction, wind_speed, bat, RCP_OK
+
+class arduinoPoller(threading.Thread):
+  def __init__(self):
+    threading.Thread.__init__(self)
+    self.current_value = None
+    self.running = True
+  def run(self):
+    while self.running:
+      self.current_value = readNumbers()[:4]
