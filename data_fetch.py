@@ -37,11 +37,18 @@ def getData():
     wind_direction -= 360
   return wind_direction, wind_speed, bat, RCP_OK
 
-class arduinoPoller(threading.Thread):
-  def __init__(self):
-    threading.Thread.__init__(self)
-    self.current_value = None
-    self.running = True
-  def run(self):
-    while self.running:
-      self.current_value = readNumbers()[:4]
+def getAsyncData(recipient):
+  try:
+    numbers = readNumber()
+    numbers = numbers[:4]
+  except:
+    recipient[0] = [ 0,0,0,RCP_FAIL ]
+
+  wind_direction_c = numbers[0] + (numbers[1] << 8)
+  wind_speed = numbers[2]
+  bat = numbers[3]
+  wind_direction_p = int(wind_direction_c / 1023. * 360.)
+  wind_direction = wind_direction_p
+  if wind_direction > 180:
+    wind_direction -= 360
+  recipient[0] = [ wind_direction, wind_speed, bat, RCP_OK ]

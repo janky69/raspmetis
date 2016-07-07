@@ -2,7 +2,7 @@
 from lcd_module import LCDController
 import smbus
 import time
-from data_fetch import getData, RCP_OK, RCP_FAIL
+from data_fetch import getData, getAsyncData, RCP_OK, RCP_FAIL
 from data_write import DataWriter
 import gpsdData
 from gpsdData import GpsPoller
@@ -60,16 +60,20 @@ if __name__ == "__main__":
   gpsd = gpsdData.gpsd
   gpsp.running = False
   # Check how these fail in case the gps module is not connected
-  # see https://gist.github.com/wolfg1969/4653340 
+  # see https://gist.github.com/wolfg1969/4653340
   # and https://learn.adafruit.com/adafruit-ultimate-gps-on-the-raspberry-pi/using-your-gps
 
   while True:
     try:
 
       # get data from arduino
-      data = getData()
+      res = [[0,0,0,RCP_FAIL] ]
+      datathread = threading.Thread(target=getAsyncData, args=(res,))
+      datathread.start()
+      datathread.join(0.1)
+      data = res[0]
       ardu_status = data[3]
-      
+
       # Start the gps watcher
       try:
         if not gpsp.running:
@@ -97,7 +101,7 @@ if __name__ == "__main__":
 
       except IOError:
         lcd_status = LCDFAIL
-      
+
       # Pass the data (formatted) to the datawriter
       if ardu_status == RCP_OK:
         datawriter.append("%d,%d,%d"%(data[0],data[1],data[2]))
@@ -114,4 +118,3 @@ if __name__ == "__main__":
 
     except:
       raise
-
