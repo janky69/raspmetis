@@ -40,4 +40,5 @@ class DataWriter(object):
     if len(self.data) >= self.datathreshold and not self.lock.locked():
       buf = copy.deepcopy(self.data)
       self.data = []
-      threading.Thread(target=writedata,args=(self.filename,buf,self.lock))
+      th = threading.Thread(target=writedata,args=(self.filename,buf,self.lock))
+      th.start()
