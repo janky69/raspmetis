@@ -1,6 +1,6 @@
 import csv
 import copy
-import thread
+import threading
 
 def writedata(filename, buf, lock):
   lock.acquire()
@@ -25,7 +25,7 @@ class DataWriter(object):
     self.filename = kwargs.pop("filename","data.csv")
     self.datathreshold = kwargs.pop("datathreshold", 10)
     self.data = []
-    self.lock = thread.allocate_lock()
+    self.lock = threading.Lock()
 
   def append(self, data):
     """Get the data from the main program. Data should be provide in the form of
@@ -40,4 +40,4 @@ class DataWriter(object):
     if len(self.data) >= self.datathreshold and not self.lock.locked():
       buf = copy.deepcopy(self.data)
       self.data = []
-      thread.start_new_thread(writedata,(self.filename,buf,self.lock))
+      threading.Thread(target=writedata,args=(self.filename,buf,self.lock))
