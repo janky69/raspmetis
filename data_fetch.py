@@ -47,8 +47,12 @@ def getAsyncData(recipient):
   wind_direction_c = numbers[0] + (numbers[1] << 8)
   wind_speed = numbers[2]
   bat = numbers[3]
-  wind_direction_p = int(wind_direction_c / 1023. * 360.)
-  wind_direction = wind_direction_p
-  if wind_direction > 180:
-    wind_direction -= 360
+#  wind_direction_p = int(wind_direction_c / 1023. * 360.)
+#  wind_direction = wind_direction_p
+#  if wind_direction > 180:
+#    wind_direction -= 360
+
+  # Debug by outputting the value as is
+  print numbers
+  wind_direction = wind_direction_c
   recipient[0] = [ wind_direction, wind_speed, bat, RCP_OK ]

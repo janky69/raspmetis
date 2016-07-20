@@ -32,8 +32,8 @@ def lcdplot(lcd_controller, data, ardu_status, gps_status):
     gps_plot_status = "_"
 
   lcd_controller.plot(
-    "Wind spd: %03d A%s" % (data[1],ardu_plot_status),
-    "Wind dir: %03d G%s" % (data[0],gps_plot_status)
+    "Wsp: %02.2f  A%s" % (data[1],ardu_plot_status),
+    "Wdr: %05d G%s" % (data[0],gps_plot_status)
   )
 
 RADIUS = 70 # radius of anemometrus in mm
@@ -78,7 +78,6 @@ if __name__ == "__main__":
   # Check how these fail in case the gps module is not connected
   # see https://gist.github.com/wolfg1969/4653340
   # and https://learn.adafruit.com/adafruit-ultimate-gps-on-the-raspberry-pi/using-your-gps
-
   start_time = timer()
 
   while True:
