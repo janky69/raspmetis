@@ -24,8 +24,8 @@ def lcdplot(lcd_controller, data, ardu_status, gps_status):
     gps_plot_status = "_"
 
   lcd_controller.plot(
-    "Wind spd: %03d A%s" % (data[1],ardu_plot_status),
-    "Wind dir: %03d G%s" % (data[0],gps_plot_status)
+    "Wspd: %03d A%s" % (data[1],ardu_plot_status),
+    "Wdir: %03d G%s" % (data[0],gps_plot_status)
   )
 
 def compute_wind_speed(wind_apparent_speed, wind_apparent_dir, fix_speed):

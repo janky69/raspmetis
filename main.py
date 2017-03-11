@@ -36,6 +36,7 @@ if __name__ == '__main__':
   gpsd = gpsdData.gpsd
   gpsp.running = False
   buttonc = buttonController()
+  print "Starting button Controller"
   buttonc.start()
 
   while running:
@@ -83,7 +84,7 @@ if __name__ == '__main__':
           lcd.initialize()
           lcd_status = LCDOK
         lcdplot(lcd, data, ardu_status, gps_status)
-        #lcd.plot("Wind spd: %03d" % data[1],"Wind dir: %03d" % data[0])
+        #lcd.plot("Wspd: %03d" % data[1],"Wdir: %03d" % data[0])
 
       except IOError:
         lcd_status = LCDFAIL
@@ -99,7 +100,13 @@ if __name__ == '__main__':
       if lcd_status == LCDOK:
         lcd.plot("Quitting, bye!","")
       gpsp.running = False
+      print "Stropping GPS"
       gpsp.join()
+      print "GPS stopped"
+      buttonc.running = False
+      print "Stopping button controller"
+      buttonc.join()
+      print "button controller stopped"
       raise
 
     except:

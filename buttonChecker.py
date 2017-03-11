@@ -16,7 +16,7 @@ class buttonController(threading.Thread):
     threading.Thread.__init__(self)
 
     self.buttonPin = buttonPin
-    GPIO.setup(self,buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(self.buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     global buttonPressed
     buttonPressed = True
@@ -27,15 +27,19 @@ class buttonController(threading.Thread):
     global buttonPressed
     try:
       while self.running:
+        print "Waiting for signal"
         GPIO.wait_for_edge(self.buttonPin, GPIO.FALLING)
+        print "Received signal"
 
         millis = int(round(time.time() * 1000))
         if self.last_press:
           if self.last_press - millis > 700:
             buttonPressed = not buttonPressed
         self.last_press = millis
+        
+        GPIO.wait_for_edge(self.buttonPin, GPIO.RISING)
+        print "Button released"
 
-      GPIO.cleanup()
     except KeyboardInterrupt:
       GPIO.cleanup()
     GPIO.cleanup()
