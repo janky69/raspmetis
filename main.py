@@ -42,7 +42,7 @@ if __name__ == '__main__':
   while running:
 
     running = updateRunSignal() #check if we need to shut down
-    saving = buttonChecker.buttonPressed #check if we need to save
+    saving = buttonc.buttonPressed #check if we need to save
 
     try:
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
       datathread.join(1)
       data = res[0]
       end_time = timer()
-      ardu_status = 1 if saving else 0 # debug value
+      ardu_status = RCP_OK if saving else RCP_FAIL # debug value
 
       # Start the gps watcher
       try:

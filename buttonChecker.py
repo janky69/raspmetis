@@ -18,13 +18,11 @@ class buttonController(threading.Thread):
     self.buttonPin = buttonPin
     GPIO.setup(self.buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    global buttonPressed
-    buttonPressed = True
+    self.buttonPressed = False
     self.running = True
-    self.last_press = None
+    self.last_press = int(round(time.time() * 1000))
 
   def run(self):
-    global buttonPressed
     try:
       while self.running:
         print "Waiting for signal"
@@ -32,10 +30,10 @@ class buttonController(threading.Thread):
         print "Received signal"
 
         millis = int(round(time.time() * 1000))
-        if self.last_press:
-          if self.last_press - millis > 700:
-            buttonPressed = not buttonPressed
+        if millis - self.last_press > 700:
+          self.buttonPressed = not self.buttonPressed
         self.last_press = millis
+        print("Millis: %d, Button: %r" % (millis, self.buttonPressed))
         
         GPIO.wait_for_edge(self.buttonPin, GPIO.RISING)
         print "Button released"
