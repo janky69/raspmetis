@@ -10,5 +10,29 @@ import math
 
 from utils import *
 
+def updateSaveSignal():
+  return False
+
+def updateRunSignal():
+  return True
+
 if __name__ == '__main__':
-  pass
+  running = True
+  saving = False
+
+  # Setup initial statuses
+  gps_status = GPSFAIL
+  lcd_status = LCDFAIL
+  ardu_status = RCP_FAIL
+
+  # Initialize controllers
+  lcd = LCDController()
+  datawriter = DataWriter(filename="/home/pi/testdata.csv")
+  gpsp = GpsPoller()
+  gpsd = gpsdData.gpsd
+  gpsp.running = False
+
+  while running:
+
+    running = updateRunSignal() #check if we need to shut down
+    saving = updateSaveSignal() #check if we need to save
