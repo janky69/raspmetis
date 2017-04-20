@@ -44,7 +44,12 @@ if __name__ == '__main__':
     try:
 
       # get data from arduino
-      data = getData()
+      res = [[0,0,0,RCP_FAIL] ]
+      datathread = threading.Thread(target=getAsyncData, args=(res,))
+      datathread.start()
+      datathread.join(1)
+      data = res[0]
+      end_time = timer()
       ardu_status = 1 if saving else 0 # debug value
 
       # Start the gps watcher
@@ -59,7 +64,13 @@ if __name__ == '__main__':
         raise
 
       try:
-        adj_speed = compute_wind_speed(data[1],data[0],gpsd.speed)
+        timedelta = end_time - start_time
+        if timedelta >= .4:
+          rps = convert_wind_speed(data[1],timedelta)
+        else:
+          rps = 10 # dummy value
+        start_time = end_time
+        adj_speed = compute_wind_speed(rps,data[0],gpsd.speed)
         data[1] = adj_speed
       except:
         pass
