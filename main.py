@@ -2,11 +2,13 @@
 from lcd_module import LCDController
 import smbus
 import time
-from data_fetch import getData, RCP_OK, RCP_FAIL
+from data_fetch import getData, getAsyncData, RCP_OK, RCP_FAIL
 from data_write import DataWriter
 import gpsdData
 from gpsdData import GpsPoller
 import math
+import threading
+from timeit import default_timer as timer
 import buttonChecker
 from buttonChecker import buttonController
 
