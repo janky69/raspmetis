@@ -34,8 +34,11 @@ class buttonController(threading.Thread):
           self.buttonPressed = not self.buttonPressed
         self.last_press = millis
         print("Millis: %d, Button: %r" % (millis, self.buttonPressed))
-        
-        GPIO.wait_for_edge(self.buttonPin, GPIO.RISING)
+
+        stop_signal = GPIO.wait_for_edge(self.buttonPin, GPIO.RISING, timeout=2500)
+        if stop_signal is None:
+          # TODO: add shutting down routine
+          print("We should stop now")
         print "Button released"
 
     except KeyboardInterrupt:
